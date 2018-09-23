@@ -1,9 +1,11 @@
-package sam.teatime
+package sam.teatime.activities
 
 import android.annotation.TargetApi
 import android.app.Activity
 import android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP
 import android.app.PendingIntent
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.AnimatedVectorDrawable
@@ -24,7 +26,15 @@ import kotlinx.android.synthetic.main.help.view.*
 import org.ligi.compat.HtmlCompat
 import org.ligi.kaxt.getAlarmManager
 import org.ligi.kaxt.setExactAndAllowWhileIdleCompat
+import sam.teatime.R
+import sam.teatime.adapters.TeaAdapter
+import sam.teatime.db.TeaRoomDatabase
+import sam.teatime.db.entities.Tea
+import sam.teatime.model.State
+import sam.teatime.timer.Timer
 import sam.teatime.receiver.TimerReceiver
+import sam.teatime.viewholders.TeaViewHolder
+import sam.teatime.viewmodels.TeaViewModel
 
 
 class MainActivity : AppCompatActivity() {
@@ -42,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
     val updater = object : Runnable {
         override fun run() {
-            val remaining = TeaProvider.currentTea.brewTime - Timer.elapsedSeconds()
+            val remaining = 300 - Timer.elapsedSeconds()
 
             val prefix = if (remaining < 0) {
                 timer_min.setTextColor(Color.RED)
@@ -57,7 +67,7 @@ class MainActivity : AppCompatActivity() {
             timer_min.text = prefix + Math.abs(remaining / 60).toString() + "m"
             timer_sec.text = Math.abs(remaining % 60).toString() + "s"
 
-            tea_progress.max = TeaProvider.currentTea.brewTime
+            tea_progress.max = 300
             tea_progress.progress = Timer.elapsedSeconds().toInt()
 
             if (pause_state != Timer.isPaused()) {
@@ -73,13 +83,10 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                if (Build.VERSION.SDK_INT >= 21) {
-                    changeDrawableWithAnimation()
-                } else {
-                    val nextDrawable = if (pause_state) R.drawable.vectalign_vector_drawable_start else R.drawable.vectalign_vector_drawable_end
-                    val drawable = VectorDrawableCompat.create(resources, nextDrawable, theme)
-                    play_pause.setImageDrawable(drawable)
-                }
+                val nextDrawable = if (pause_state) R.drawable.vectalign_vector_drawable_start else R.drawable.vectalign_vector_drawable_end
+                val drawable = VectorDrawableCompat.create(resources, nextDrawable, theme)
+                play_pause.setImageDrawable(drawable)
+
             }
             invalidateOptionsMenu()
 
@@ -158,7 +165,10 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         handler.post(updater)
-        TeaViewHolder(window.decorView).bind(TeaProvider.currentTea)
+        val teaViewModel = ViewModelProviders.of(this).get(TeaViewModel::class.java)
+        teaViewModel.allTeas.observe(this, Observer { teas ->
+            teas?.find { tea -> tea.id == State.lastSelectedTeaId }?.let { TeaViewHolder(window.decorView).bind(it) }
+        })
     }
 }
 

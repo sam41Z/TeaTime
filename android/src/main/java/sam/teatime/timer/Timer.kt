@@ -1,4 +1,4 @@
-package sam.teatime
+package sam.teatime.timer
 
 import android.os.SystemClock
 

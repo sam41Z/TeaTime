@@ -9,10 +9,10 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name="sam.teatime.TeaListActivity"
+                android:name="sam.teatime.activities.TeaListActivity"
                 android:screenOrientation="portrait"/>
         <activity
-                android:name="sam.teatime.MainActivity"
+                android:name="sam.teatime.activities.MainActivity"
                 android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

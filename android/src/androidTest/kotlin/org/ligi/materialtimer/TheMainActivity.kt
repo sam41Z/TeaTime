@@ -5,7 +5,7 @@ import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import org.junit.Rule
 import org.junit.Test
-import sam.teatime.MainActivity
+import sam.teatime.activities.MainActivity
 import sam.teatime.R
 import org.ligi.trulesk.TruleskActivityRule
 

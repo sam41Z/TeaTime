@@ -10,7 +10,7 @@ import android.os.SystemClock
 import android.support.v4.app.NotificationCompat
 import org.ligi.kaxt.getAlarmManager
 import org.ligi.kaxt.getNotificationManager
-import sam.teatime.MainActivity
+import sam.teatime.activities.MainActivity
 import sam.teatime.R
 import java.util.*
 
