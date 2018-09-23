@@ -1,4 +1,4 @@
-package org.ligi.materialteatimer
+package sam.teatime
 
 import android.annotation.TargetApi
 import android.app.Activity
@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.help.view.*
 import org.ligi.compat.HtmlCompat
 import org.ligi.kaxt.getAlarmManager
 import org.ligi.kaxt.setExactAndAllowWhileIdleCompat
-import org.ligi.materialteatimer.receiver.TimerReceiver
+import sam.teatime.receiver.TimerReceiver
 
 
 class MainActivity : AppCompatActivity() {

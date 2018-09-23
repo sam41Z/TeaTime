@@ -1,10 +1,10 @@
-package org.ligi.materialteatimer.receiver
+package sam.teatime.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import org.ligi.kaxt.getNotificationManager
-import org.ligi.materialteatimer.Timer
+import sam.teatime.Timer
 
 class CancelNotificationReceiver : BroadcastReceiver() {
 

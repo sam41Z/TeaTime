@@ -1,4 +1,4 @@
-package org.ligi.materialteatimer.receiver
+package sam.teatime.receiver
 
 import android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP
 import android.app.Notification
@@ -10,8 +10,8 @@ import android.os.SystemClock
 import android.support.v4.app.NotificationCompat
 import org.ligi.kaxt.getAlarmManager
 import org.ligi.kaxt.getNotificationManager
-import org.ligi.materialteatimer.MainActivity
-import org.ligi.materialteatimer.R
+import sam.teatime.MainActivity
+import sam.teatime.R
 import java.util.*
 
 class TimerReceiver : BroadcastReceiver() {

@@ -1,4 +1,4 @@
-package org.ligi.materialteatimer
+package sam.teatime
 
 import android.annotation.TargetApi
 import android.app.Activity
@@ -9,8 +9,8 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.tea_card.view.*
-import org.ligi.materialteatimer.model.State
-import org.ligi.materialteatimer.model.TeaInfo
+import sam.teatime.model.State
+import sam.teatime.model.TeaInfo
 
 class TeaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

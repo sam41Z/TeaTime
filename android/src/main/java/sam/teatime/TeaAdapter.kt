@@ -1,4 +1,4 @@
-package org.ligi.materialteatimer
+package sam.teatime
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

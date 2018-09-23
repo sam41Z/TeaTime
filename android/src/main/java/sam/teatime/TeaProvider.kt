@@ -1,7 +1,7 @@
-package org.ligi.materialteatimer
+package sam.teatime
 
-import org.ligi.materialteatimer.model.State
-import org.ligi.materialteatimer.model.TeaInfo
+import sam.teatime.model.State
+import sam.teatime.model.TeaInfo
 
 object TeaProvider {
 

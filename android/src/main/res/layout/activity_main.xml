@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:background="@android:color/white"
         android:layout_height="match_parent"
-        tools:context="org.ligi.materialteatimer.MainActivity">
+        tools:context="sam.teatime.MainActivity">
 
     <LinearLayout
             android:layout_centerHorizontal="true"

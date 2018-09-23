@@ -1,4 +1,4 @@
-package org.ligi.materialteatimer
+package sam.teatime
 
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
