@@ -10,7 +10,7 @@ import android.os.SystemClock
 import android.support.v4.app.NotificationCompat
 import org.ligi.kaxt.getAlarmManager
 import org.ligi.kaxt.getNotificationManager
-import sam.teatime.activities.MainActivity
+import sam.teatime.activities.TimerActivity
 import sam.teatime.R
 import java.util.*
 
@@ -23,7 +23,7 @@ class TimerReceiver : BroadcastReceiver() {
         val pendingIntent = PendingIntent.getActivity(
                 context,
                 0,
-                Intent(context, MainActivity::class.java),
+                Intent(context, TimerActivity::class.java),
                 PendingIntent.FLAG_UPDATE_CURRENT)
 
         val notification = NotificationCompat.Builder(context, "main")

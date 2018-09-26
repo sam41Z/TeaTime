@@ -7,20 +7,20 @@ import android.support.v4.app.ActivityCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_tealist.*
+import kotlinx.android.synthetic.main.activity_teas.*
 import org.ligi.kaxt.startActivityFromClass
 import sam.teatime.R
 import sam.teatime.adapters.TeaAdapter
 import sam.teatime.viewmodels.TeaViewModel
 
-class TeaListActivity : AppCompatActivity() {
+class TeaActivity : AppCompatActivity() {
 
     private lateinit var teaViewModel: TeaViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ActivityCompat.postponeEnterTransition(this)
-        setContentView(R.layout.activity_tealist)
+        setContentView(R.layout.activity_teas)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         tea_recycler.layoutManager = LinearLayoutManager(this)
@@ -28,7 +28,6 @@ class TeaListActivity : AppCompatActivity() {
         tea_recycler.adapter = adapter
 
         tea_recycler.postDelayed({
-            // we had to give the recyclerview some time so we have the image to transition into
             ActivityCompat.startPostponedEnterTransition(this)
         },100)
 
@@ -41,7 +40,7 @@ class TeaListActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId){
         android.R.id.home -> {
-            startActivityFromClass(MainActivity::class.java)
+            startActivityFromClass(TimerActivity::class.java)
             finish()
             true
         }

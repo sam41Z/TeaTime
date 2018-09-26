@@ -6,29 +6,28 @@ import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.Main
 import sam.teatime.db.TeaRoomDatabase
-import sam.teatime.db.entities.Tea
-import sam.teatime.db.entities.TeaWithInfusions
-import sam.teatime.db.repositories.TeaRepository
+import sam.teatime.db.entities.Pot
+import sam.teatime.db.repositories.PotRepository
 import kotlin.coroutines.experimental.CoroutineContext
 
-class TeaViewModel(application: Application) : AndroidViewModel(application) {
+class PotViewModel(application: Application) : AndroidViewModel(application) {
 
     private var parentJob = Job()
     private val coroutineContext: CoroutineContext
         get() = parentJob + Dispatchers.Main
     private val scope = CoroutineScope(coroutineContext)
 
-    private val repository: TeaRepository
-    val allTeas: LiveData<List<TeaWithInfusions>>
+    private val repository: PotRepository
+    val allPots: LiveData<List<Pot>>
 
     init {
-        val teaDao = TeaRoomDatabase.getDatabase(application, scope).teaDao()
-        repository = TeaRepository(teaDao)
-        allTeas = repository.allTeas
+        val potDao = TeaRoomDatabase.getDatabase(application, scope).potDao()
+        repository = PotRepository(potDao)
+        allPots = repository.allPots
     }
 
-    fun insert(tea: Tea) = scope.launch(Dispatchers.IO) {
-        repository.insert(tea)
+    fun insert(pot: Pot) = scope.launch(Dispatchers.IO) {
+        repository.insert(pot)
     }
 
     override fun onCleared() {

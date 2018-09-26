@@ -8,12 +8,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "28.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "28.0.3"
     defaultConfig {
         applicationId "sam.teatime"
         minSdkVersion 26
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -105,7 +105,6 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-
     implementation "com.android.support:appcompat-v7:$support_version"
     implementation "com.android.support:design:$support_version"
     implementation "com.android.support:recyclerview-v7:$support_version"
@@ -158,4 +157,10 @@ android.applicationVariants.all { variant ->
 spoon {
     debug = true
     grantAllPermissions = true
+}
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
 }

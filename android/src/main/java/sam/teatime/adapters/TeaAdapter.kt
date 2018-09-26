@@ -4,14 +4,14 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import sam.teatime.R
-import sam.teatime.db.entities.Tea
+import sam.teatime.db.entities.TeaWithInfusions
 import sam.teatime.viewholders.TeaViewHolder
 
 class TeaAdapter : RecyclerView.Adapter<TeaViewHolder>() {
 
-    private var teas = emptyList<Tea>() // Cached copy of words
+    private var teas = emptyList<TeaWithInfusions>() // Cached copy of words
 
-    internal fun setTeas(teas: List<Tea>) {
+    internal fun setTeas(teas: List<TeaWithInfusions>) {
         this.teas = teas
         notifyDataSetChanged()
     }

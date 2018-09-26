@@ -1,43 +1,36 @@
 package sam.teatime.activities
 
-import android.annotation.TargetApi
-import android.app.Activity
 import android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP
 import android.app.PendingIntent
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.AnimatedVectorDrawable
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
 import android.support.graphics.drawable.VectorDrawableCompat
-import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_pots.*
+import kotlinx.android.synthetic.main.activity_timer.*
 import kotlinx.android.synthetic.main.help.view.*
 import org.ligi.compat.HtmlCompat
 import org.ligi.kaxt.getAlarmManager
 import org.ligi.kaxt.setExactAndAllowWhileIdleCompat
+import org.ligi.kaxt.startActivityFromClass
 import sam.teatime.R
-import sam.teatime.adapters.TeaAdapter
-import sam.teatime.db.TeaRoomDatabase
-import sam.teatime.db.entities.Tea
 import sam.teatime.model.State
-import sam.teatime.timer.Timer
 import sam.teatime.receiver.TimerReceiver
+import sam.teatime.timer.Timer
 import sam.teatime.viewholders.TeaViewHolder
 import sam.teatime.viewmodels.TeaViewModel
 
 
-class MainActivity : AppCompatActivity() {
+class TimerActivity : AppCompatActivity() {
 
     var handler = Handler()
 
@@ -48,7 +41,8 @@ class MainActivity : AppCompatActivity() {
 
     var defaultTextColor: Int = 0
 
-    private var pause_state = !Timer.isPaused()
+    private var pauseState = !Timer.isPaused()
+    private var time = 180
 
     val updater = object : Runnable {
         override fun run() {
@@ -70,11 +64,11 @@ class MainActivity : AppCompatActivity() {
             tea_progress.max = 300
             tea_progress.progress = Timer.elapsedSeconds().toInt()
 
-            if (pause_state != Timer.isPaused()) {
+            if (pauseState != Timer.isPaused()) {
 
-                pause_state = Timer.isPaused()
+                pauseState = Timer.isPaused()
 
-                if (pause_state) {
+                if (pauseState) {
                     getAlarmManager().cancel(pendingTimerReceiver)
                 } else {
                     if (remaining > 0) {
@@ -83,7 +77,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                val nextDrawable = if (pause_state) R.drawable.vectalign_vector_drawable_start else R.drawable.vectalign_vector_drawable_end
+                val nextDrawable = if (pauseState) R.drawable.vectalign_vector_drawable_start else R.drawable.vectalign_vector_drawable_end
                 val drawable = VectorDrawableCompat.create(resources, nextDrawable, theme)
                 play_pause.setImageDrawable(drawable)
 
@@ -92,18 +86,11 @@ class MainActivity : AppCompatActivity() {
 
             handler.postDelayed(this, 50)
         }
-
-        @TargetApi(21)
-        private fun changeDrawableWithAnimation() {
-            val drawable = getDrawable(if (pause_state) R.drawable.vectalign_animated_vector_drawable_end_to_start else R.drawable.vectalign_animated_vector_drawable_start_to_end) as AnimatedVectorDrawable
-            play_pause.setImageDrawable(drawable)
-            drawable.start()
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_timer)
 
         defaultTextColor = timer_min.currentTextColor
 
@@ -111,22 +98,9 @@ class MainActivity : AppCompatActivity() {
             Timer.togglePause()
         }
 
-        fab.setOnClickListener {
-            val listIntent = Intent(this, TeaListActivity::class.java)
-
-            if (Build.VERSION.SDK_INT >= 21) {
-                makeTransition(this, listIntent)
-            } else {
-                startActivity(listIntent)
-            }
-            handler.postDelayed({ finish() }, 1000)
+        fabTimer.setOnClickListener {
+            startActivityFromClass(TeaActivity::class.java)
         }
-    }
-
-    @TargetApi(21)
-    private fun makeTransition(activity: Activity, intent: Intent) {
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, teaImage as View, getString(R.string.tea_transition_from_main))
-        activity.startActivity(intent, options.toBundle())
     }
 
     override fun onPause() {
@@ -167,7 +141,9 @@ class MainActivity : AppCompatActivity() {
         handler.post(updater)
         val teaViewModel = ViewModelProviders.of(this).get(TeaViewModel::class.java)
         teaViewModel.allTeas.observe(this, Observer { teas ->
-            teas?.find { tea -> tea.id == State.lastSelectedTeaId }?.let { TeaViewHolder(window.decorView).bind(it) }
+            teas?.find { tea -> tea.tea.id == State.lastSelectedTeaId }?.let {
+                TeaViewHolder(window.decorView).bind(it)
+            }
         })
     }
 }

@@ -1,20 +1,21 @@
 package sam.teatime.viewholders
 
-import android.app.Activity
 import android.content.Intent
+import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import kotlinx.android.synthetic.main.tea_card.view.*
-import sam.teatime.activities.MainActivity
-import sam.teatime.db.entities.Tea
+import org.ligi.kaxt.startActivityFromClass
+import sam.teatime.activities.TimerActivity
+import sam.teatime.db.entities.TeaWithInfusions
 import sam.teatime.model.State
 import sam.teatime.timer.Timer
 
 
 class TeaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun bind(tea: Tea) {
-        itemView.tea_name.text = tea.name
+    fun bind(tea: TeaWithInfusions) {
+        itemView.tea_name.text = tea.tea.name
 
         if (itemView.infoIcon != null) {
 
@@ -25,12 +26,12 @@ class TeaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
             itemView.setOnClickListener {
                 Timer.resetAndPause()
-                State.lastSelectedTeaId = tea.id
 
-                val activity = itemView.context as Activity
-                val intent = Intent(activity, MainActivity::class.java)
+                val activity = itemView.context as FragmentActivity
+                State.lastSelectedTeaId = tea.tea.id
+                State.lastSelectedInfusionIndex = 0
 
-                activity.startActivity(intent)
+                activity.startActivityFromClass(TimerActivity::class.java)
 
                 itemView.postDelayed({
                     activity.finish()
