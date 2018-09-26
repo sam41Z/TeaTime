@@ -162,10 +162,11 @@ class TimerActivity : AppCompatActivity() {
     private fun updateView() {
         val tea = tea
         if (tea != null && tea.infusions.isNotEmpty()) {
-            time = tea.infusions[State.lastSelectedInfusionIndex].time
             maxInfusions = tea.infusions.size
+            val infusionIndex = Math.min(State.lastSelectedInfusionIndex, maxInfusions - 1)
+            time = tea.infusions[infusionIndex].time
             tea_name.text = tea.tea.name
-            tea_infusion.text = "Infusion ${State.lastSelectedInfusionIndex + 1}"
+            tea_infusion.text = "Infusion ${infusionIndex + 1}"
             tea_mins.text = "${time / 60}m"
             tea_secs.text = "${time % 60}s"
         }

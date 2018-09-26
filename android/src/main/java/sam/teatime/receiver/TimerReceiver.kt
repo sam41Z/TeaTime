@@ -16,6 +16,8 @@ import org.ligi.kaxt.getNotificationManager
 import sam.teatime.activities.TimerActivity
 import sam.teatime.R
 import java.util.*
+import android.os.PowerManager
+
 
 class TimerReceiver : BroadcastReceiver() {
 
@@ -25,6 +27,12 @@ class TimerReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent?) {
         createChannel(context)
+
+        val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK or
+                PowerManager.ACQUIRE_CAUSES_WAKEUP or
+                PowerManager.ON_AFTER_RELEASE, "mysms1")
+        wakeLock.acquire(1000)
 
         val pendingIntent = PendingIntent.getActivity(
                 context,
@@ -42,8 +50,9 @@ class TimerReceiver : BroadcastReceiver() {
                 .build()
 
         context.getNotificationManager().notify(notificationId, notification)
-
         createAndInstallCancellation(context)
+
+        wakeLock.release()
     }
 
     private fun createAndInstallCancellation(context: Context) {
@@ -63,6 +72,7 @@ class TimerReceiver : BroadcastReceiver() {
         channel.enableLights(true)
         channel.lightColor = Color.CYAN
         channel.setShowBadge(true)
+        channel.vibrationPattern = longArrayOf(0, 1000, 1000, 1000, 1000, 1000)
         context.getNotificationManager().createNotificationChannel(channel)
     }
 
