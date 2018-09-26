@@ -9,16 +9,13 @@ import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.launch
-import sam.teatime.db.dao.PotDao
 import sam.teatime.db.dao.TeaDao
 import sam.teatime.db.entities.Infusion
-import sam.teatime.db.entities.Pot
 import sam.teatime.db.entities.Tea
 
-@Database(entities = [(Tea::class), (Infusion::class), (Pot::class)], version = 1)
+@Database(entities = [(Tea::class), (Infusion::class)], version = 1)
 abstract class TeaRoomDatabase : RoomDatabase() {
     abstract fun teaDao(): TeaDao
-    abstract fun potDao(): PotDao
 
     companion object {
         @Volatile
