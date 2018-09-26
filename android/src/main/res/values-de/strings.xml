@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tea Timer</string>
+    <string name="app_name">Tea Time</string>
     <string name="notification_text_tea_ready">Tee ist fertig!</string>
     <string name="help">
 <![CDATA[
