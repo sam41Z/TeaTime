@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.tea_card.view.*
 import org.ligi.kaxt.startActivityFromClass
 import sam.teatime.activities.TimerActivity
 import sam.teatime.db.entities.TeaWithInfusions
-import sam.teatime.model.State
+import sam.teatime.State
 import sam.teatime.timer.Timer
 
 

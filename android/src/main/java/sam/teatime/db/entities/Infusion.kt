@@ -10,11 +10,11 @@ import android.arch.persistence.room.ForeignKey
             ForeignKey(
                     entity = Tea::class,
                     parentColumns = ["id"],
-                    childColumns = ["teaId"])]
+                    childColumns = ["teaId"],
+                    onDelete = ForeignKey.CASCADE)]
 )
 data class Infusion(
         val teaId: Int,
-        val index: Int
-) {
-    var time: Long = 180
-}
+        val index: Int,
+        var time: Int = 180
+)

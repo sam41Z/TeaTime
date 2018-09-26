@@ -9,6 +9,7 @@ import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.launch
+import sam.teatime.State
 import sam.teatime.db.dao.TeaDao
 import sam.teatime.db.entities.Infusion
 import sam.teatime.db.entities.Tea
@@ -54,12 +55,50 @@ abstract class TeaRoomDatabase : RoomDatabase() {
 
         fun populateDatabase(teaDao: TeaDao) {
             teaDao.deleteAll()
-            var tea = Tea("Green")
+            var tea = Tea(0, "Green")
+            var infusions = arrayOf(
+                    Infusion(0, 0, 180),
+                    Infusion(0, 1, 210),
+                    Infusion(0, 2, 240),
+                    Infusion(0, 3, 270),
+                    Infusion(0, 4, 300),
+                    Infusion(0, 5, 345),
+                    Infusion(0, 6, 390),
+                    Infusion(0, 7, 435)
+            )
             teaDao.insert(tea)
-            tea = Tea("Oolong")
+            infusions.forEach { infusion -> teaDao.insert(infusion) }
+
+            tea = Tea(1, "Oolong")
+            infusions = arrayOf(
+                    Infusion(1, 0, 240),
+                    Infusion(1, 1, 270),
+                    Infusion(1, 2, 300),
+                    Infusion(1, 3, 345),
+                    Infusion(1, 4, 390),
+                    Infusion(1, 5, 435),
+                    Infusion(1, 6, 480),
+                    Infusion(1, 7, 525)
+            )
             teaDao.insert(tea)
-            tea = Tea("Black")
+            infusions.forEach { infusion -> teaDao.insert(infusion) }
+
+            tea = Tea(2, "Black")
+            infusions = arrayOf(
+                    Infusion(2, 0, 210),
+                    Infusion(2, 1, 240),
+                    Infusion(2, 2, 270),
+                    Infusion(2, 3, 300),
+                    Infusion(2, 4, 345),
+                    Infusion(2, 5, 390),
+                    Infusion(2, 6, 435),
+                    Infusion(2, 7, 480)
+            )
             teaDao.insert(tea)
+            infusions.forEach { infusion -> teaDao.insert(infusion) }
+
+            State.lastSelectedTeaId = 1
+            State.lastSelectedInfusionIndex = 0
         }
     }
 }

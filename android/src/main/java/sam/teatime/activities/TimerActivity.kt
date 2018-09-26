@@ -15,7 +15,6 @@ import android.support.v7.app.AppCompatActivity
 import android.text.method.LinkMovementMethod
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_pots.*
 import kotlinx.android.synthetic.main.activity_timer.*
 import kotlinx.android.synthetic.main.help.view.*
 import org.ligi.compat.HtmlCompat
@@ -23,10 +22,10 @@ import org.ligi.kaxt.getAlarmManager
 import org.ligi.kaxt.setExactAndAllowWhileIdleCompat
 import org.ligi.kaxt.startActivityFromClass
 import sam.teatime.R
-import sam.teatime.model.State
+import sam.teatime.State
+import sam.teatime.db.entities.TeaWithInfusions
 import sam.teatime.receiver.TimerReceiver
 import sam.teatime.timer.Timer
-import sam.teatime.viewholders.TeaViewHolder
 import sam.teatime.viewmodels.TeaViewModel
 
 
@@ -43,10 +42,12 @@ class TimerActivity : AppCompatActivity() {
 
     private var pauseState = !Timer.isPaused()
     private var time = 180
+    private var maxInfusions = 0
+    private var tea: TeaWithInfusions? = null
 
     val updater = object : Runnable {
         override fun run() {
-            val remaining = 300 - Timer.elapsedSeconds()
+            val remaining = time - Timer.elapsedSeconds()
 
             val prefix = if (remaining < 0) {
                 timer_min.setTextColor(Color.RED)
@@ -59,7 +60,8 @@ class TimerActivity : AppCompatActivity() {
             }
 
             timer_min.text = prefix + Math.abs(remaining / 60).toString() + "m"
-            timer_sec.text = Math.abs(remaining % 60).toString() + "s"
+            val zeroSecPrefix = if (Math.abs((remaining % 60)) < 10) "0" else ""
+            timer_sec.text = zeroSecPrefix + Math.abs(remaining % 60).toString() + "s"
 
             tea_progress.max = 300
             tea_progress.progress = Timer.elapsedSeconds().toInt()
@@ -70,11 +72,9 @@ class TimerActivity : AppCompatActivity() {
 
                 if (pauseState) {
                     getAlarmManager().cancel(pendingTimerReceiver)
-                } else {
-                    if (remaining > 0) {
-                        val triggerAtMillis = SystemClock.elapsedRealtime() + remaining * 1000
-                        getAlarmManager().setExactAndAllowWhileIdleCompat(ELAPSED_REALTIME_WAKEUP, triggerAtMillis, pendingTimerReceiver)
-                    }
+                } else if (remaining > 0) {
+                    val triggerAtMillis = SystemClock.elapsedRealtime() + remaining * 1000
+                    getAlarmManager().setExactAndAllowWhileIdleCompat(ELAPSED_REALTIME_WAKEUP, triggerAtMillis, pendingTimerReceiver)
                 }
 
                 val nextDrawable = if (pauseState) R.drawable.vectalign_vector_drawable_start else R.drawable.vectalign_vector_drawable_end
@@ -96,6 +96,17 @@ class TimerActivity : AppCompatActivity() {
 
         play_pause.setOnClickListener {
             Timer.togglePause()
+        }
+
+        previous_infusion.setOnClickListener {
+            Timer.resetAndPause()
+            State.lastSelectedInfusionIndex = Math.max(0, State.lastSelectedInfusionIndex - 1)
+            updateView()
+        }
+        next_infusion.setOnClickListener {
+            Timer.resetAndPause()
+            State.lastSelectedInfusionIndex = Math.min(maxInfusions - 1, State.lastSelectedInfusionIndex + 1)
+            updateView()
         }
 
         fabTimer.setOnClickListener {
@@ -138,13 +149,26 @@ class TimerActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        handler.post(updater)
         val teaViewModel = ViewModelProviders.of(this).get(TeaViewModel::class.java)
         teaViewModel.allTeas.observe(this, Observer { teas ->
             teas?.find { tea -> tea.tea.id == State.lastSelectedTeaId }?.let {
-                TeaViewHolder(window.decorView).bind(it)
+                tea = it
+                updateView()
             }
+            handler.post(updater)
         })
+    }
+
+    private fun updateView() {
+        val tea = tea
+        if (tea != null && tea.infusions.isNotEmpty()) {
+            time = tea.infusions[State.lastSelectedInfusionIndex].time
+            maxInfusions = tea.infusions.size
+            tea_name.text = tea.tea.name
+            tea_infusion.text = "Infusion ${State.lastSelectedInfusionIndex + 1}"
+            tea_mins.text = "${time / 60}m"
+            tea_secs.text = "${time % 60}s"
+        }
     }
 }
 

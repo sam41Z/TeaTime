@@ -2,10 +2,13 @@ package sam.teatime.receiver
 
 import android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP
 import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.SystemClock
 import android.support.v4.app.NotificationCompat
 import org.ligi.kaxt.getAlarmManager
@@ -17,8 +20,11 @@ import java.util.*
 class TimerReceiver : BroadcastReceiver() {
 
     private val notificationId by lazy { Random().nextInt() }
+    private val channelId by lazy { UUID.randomUUID().toString() }
+
 
     override fun onReceive(context: Context, intent: Intent?) {
+        createChannel(context)
 
         val pendingIntent = PendingIntent.getActivity(
                 context,
@@ -26,7 +32,7 @@ class TimerReceiver : BroadcastReceiver() {
                 Intent(context, TimerActivity::class.java),
                 PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val notification = NotificationCompat.Builder(context, "main")
+        val notification = NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(context.getString(R.string.app_name))
                 .setContentIntent(pendingIntent)
@@ -49,6 +55,15 @@ class TimerReceiver : BroadcastReceiver() {
         val pendingCancelIntent = PendingIntent.getBroadcast(context, 0, cancelIntent, PendingIntent.FLAG_CANCEL_CURRENT)
 
         context.getAlarmManager().set(ELAPSED_REALTIME_WAKEUP, triggerAtMillis, pendingCancelIntent)
+    }
+
+    private fun createChannel(context: Context) {
+        val channel = NotificationChannel(channelId, "Tea Time", NotificationManager.IMPORTANCE_HIGH)
+        channel.description = "Notifies when tea is ready"
+        channel.enableLights(true)
+        channel.lightColor = Color.CYAN
+        channel.setShowBadge(true)
+        context.getNotificationManager().createNotificationChannel(channel)
     }
 
 }

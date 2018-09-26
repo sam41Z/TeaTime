@@ -1,4 +1,4 @@
-package sam.teatime.model
+package sam.teatime
 
 import com.chibatching.kotpref.KotprefModel
 

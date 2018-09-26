@@ -5,6 +5,7 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.Query
 import android.arch.persistence.room.Update
+import sam.teatime.db.entities.Infusion
 import sam.teatime.db.entities.Tea
 import sam.teatime.db.entities.TeaWithInfusions
 
@@ -15,6 +16,12 @@ interface TeaDao {
 
     @Update
     fun update(tea: Tea)
+
+    @Insert
+    fun insert(Infusion: Infusion)
+
+    @Update
+    fun update(Infusion: Infusion)
 
     @Query("DELETE FROM teas")
     fun deleteAll()
