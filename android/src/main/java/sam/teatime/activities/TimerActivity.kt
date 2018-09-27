@@ -110,6 +110,12 @@ class TimerActivity : AppCompatActivity() {
             updateView()
         }
 
+//        stop.setOnClickListener {
+//            Timer.resetAndPause()
+//            State.lastSelectedInfusionIndex = Math.min(maxInfusions - 1, State.lastSelectedInfusionIndex + 1)
+//            updateView()
+//        }
+
         fabTimer.setOnClickListener {
             startActivityFromClass(TeaActivity::class.java)
         }

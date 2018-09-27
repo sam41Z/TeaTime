@@ -20,8 +20,9 @@
     <android.support.v7.widget.AppCompatImageView
       android:id="@+id/previous_infusion"
       android:src="@drawable/vectalign_vector_drawable_previous"
-      android:padding="6dp"
-      android:layout_width="48dp"
+      android:paddingTop="4dp"
+      android:paddingBottom="8dp"
+      android:layout_width="96dp"
       android:layout_height="48dp"
       android:layout_gravity="center_vertical"/>
 
@@ -36,8 +37,9 @@
     <android.support.v7.widget.AppCompatImageView
       android:id="@+id/next_infusion"
       android:src="@drawable/vectalign_vector_drawable_next"
-      android:padding="6dp"
-      android:layout_width="48dp"
+      android:paddingTop="4dp"
+      android:paddingBottom="8dp"
+      android:layout_width="96dp"
       android:layout_height="48dp"
       android:layout_gravity="center_vertical"/>
   </LinearLayout>
@@ -65,20 +67,34 @@
       tools:text="10s"/>
   </LinearLayout>
 
-  <android.support.v7.widget.AppCompatImageView
-    android:paddingBottom="48dp"
-    android:id="@+id/play_pause"
+  <LinearLayout
+    android:id="@+id/controls"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical"
     android:layout_below="@+id/timeContainer"
-    android:layout_centerHorizontal="true"/>
+    android:layout_centerHorizontal="true"
+    android:layout_marginBottom="48dp"
+    android:layout_marginTop="24dp"
+    android:orientation="horizontal">
+    <android.support.v7.widget.AppCompatImageView
+      android:id="@+id/play_pause"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical"/>
+    <!--<android.support.v7.widget.AppCompatImageView-->
+      <!--android:id="@+id/stop"-->
+      <!--android:src="@drawable/vectalign_vector_drawable_stop"-->
+      <!--android:layout_width="wrap_content"-->
+      <!--android:layout_height="wrap_content"-->
+      <!--android:layout_gravity="center_vertical"/>-->
+
+  </LinearLayout>
 
   <ProgressBar
-    android:layout_below="@id/play_pause"
+    android:layout_below="@id/controls"
     style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
     android:id="@+id/tea_progress"
-    android:layout_margin="8dp"
+    android:layout_margin="12dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"/>
 

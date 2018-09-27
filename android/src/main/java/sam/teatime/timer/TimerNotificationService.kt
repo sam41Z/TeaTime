@@ -25,9 +25,9 @@ class TimerNotificationService : Service() {
         override fun run() {
             notification?.setProgress(time, Timer.elapsedSeconds().toInt(), false)
             val remaining = time - Timer.elapsedSeconds().toInt()
-            val mins = remaining / 60
-            val secs = remaining % 60
-            notification?.setContentText("${mins}m${secs}s remaining")
+            val mins = if (remaining/60 > 0) "${(remaining / 60)}:" else ""
+            val secs = (if (!mins.isEmpty() && remaining < 10) "0" else "") + (remaining % 60)
+            notification?.setContentText("${mins}${secs}")
             startForeground(notificationId, notification?.build())
             handler.postDelayed(this, 1000)
         }
@@ -50,7 +50,7 @@ class TimerNotificationService : Service() {
                 Intent(applicationContext, TimerActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
         notification = NotificationCompat.Builder(applicationContext, channelId)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle(application.getString(R.string.app_name))
+                .setContentTitle("It's time for tea in:")
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setOngoing(true)

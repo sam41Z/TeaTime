@@ -17,6 +17,7 @@ import sam.teatime.activities.TimerActivity
 import sam.teatime.R
 import java.util.*
 import android.os.PowerManager
+import sam.teatime.timer.TimerNotificationService
 
 
 class TimerReceiver : BroadcastReceiver() {
@@ -26,6 +27,8 @@ class TimerReceiver : BroadcastReceiver() {
 
 
     override fun onReceive(context: Context, intent: Intent?) {
+        context.stopService(Intent(context, TimerNotificationService::class.java))
+
         createChannel(context)
 
         val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
@@ -52,7 +55,7 @@ class TimerReceiver : BroadcastReceiver() {
                 .setContentText(context.getString(R.string.notification_text_tea_ready))
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setAutoCancel(true)
-                .addAction(NotificationCompat.Action.Builder(R.drawable.ic_notification, "done", pendingCancelIntent).build())
+//                .addAction(NotificationCompat.Action.Builder(R.drawable.ic_notification, "done", pendingCancelIntent).build())
                 .build()
 
         context.getNotificationManager().notify(notificationId, notification)
