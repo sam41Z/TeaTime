@@ -28,5 +28,4 @@ object Timer {
 
     fun isPaused() = pauseTime != null
 
-
 }

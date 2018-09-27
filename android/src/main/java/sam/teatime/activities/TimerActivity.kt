@@ -26,6 +26,7 @@ import sam.teatime.State
 import sam.teatime.db.entities.TeaWithInfusions
 import sam.teatime.receiver.TimerReceiver
 import sam.teatime.timer.Timer
+import sam.teatime.timer.TimerNotificationService
 import sam.teatime.viewmodels.TeaViewModel
 
 
@@ -45,7 +46,7 @@ class TimerActivity : AppCompatActivity() {
     private var maxInfusions = 0
     private var tea: TeaWithInfusions? = null
 
-    val updater = object : Runnable {
+    private val updater = object : Runnable {
         override fun run() {
             val remaining = time - Timer.elapsedSeconds()
 
@@ -63,7 +64,7 @@ class TimerActivity : AppCompatActivity() {
             val zeroSecPrefix = if (Math.abs((remaining % 60)) < 10) "0" else ""
             timer_sec.text = zeroSecPrefix + Math.abs(remaining % 60).toString() + "s"
 
-            tea_progress.max = 300
+            tea_progress.max = time
             tea_progress.progress = Timer.elapsedSeconds().toInt()
 
             if (pauseState != Timer.isPaused()) {
@@ -116,6 +117,11 @@ class TimerActivity : AppCompatActivity() {
 
     override fun onPause() {
         handler.removeCallbacks(updater)
+        if (!Timer.isPaused()) {
+            val intent = Intent(this, TimerNotificationService::class.java)
+            intent.putExtra("time", time)
+            startService(intent)
+        }
         super.onPause()
     }
 
@@ -149,6 +155,9 @@ class TimerActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        stopService(Intent(this, TimerNotificationService::class.java))
+
         val teaViewModel = ViewModelProviders.of(this).get(TeaViewModel::class.java)
         teaViewModel.allTeas.observe(this, Observer { teas ->
             teas?.find { tea -> tea.tea.id == State.lastSelectedTeaId }?.let {

@@ -96,6 +96,14 @@ abstract class TeaRoomDatabase : RoomDatabase() {
             )
             teaDao.insert(tea)
             infusions.forEach { infusion -> teaDao.insert(infusion) }
+            tea = Tea(3, "Test")
+            infusions = arrayOf(
+                    Infusion(3, 0, 10),
+                    Infusion(3, 1, 30),
+                    Infusion(3, 2, 60)
+            )
+            teaDao.insert(tea)
+            infusions.forEach { infusion -> teaDao.insert(infusion) }
 
             State.lastSelectedTeaId = 1
             State.lastSelectedInfusionIndex = 0

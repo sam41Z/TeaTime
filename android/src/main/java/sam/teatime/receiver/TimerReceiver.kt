@@ -22,7 +22,7 @@ import android.os.PowerManager
 class TimerReceiver : BroadcastReceiver() {
 
     private val notificationId by lazy { Random().nextInt() }
-    private val channelId by lazy { UUID.randomUUID().toString() }
+    private val channelId = "alarm"
 
 
     override fun onReceive(context: Context, intent: Intent?) {
@@ -40,6 +40,11 @@ class TimerReceiver : BroadcastReceiver() {
                 Intent(context, TimerActivity::class.java),
                 PendingIntent.FLAG_UPDATE_CURRENT)
 
+        val cancelIntent = Intent(context, CancelNotificationReceiver::class.java)
+        cancelIntent.putExtra("id", notificationId)
+        cancelIntent.putExtra("incrementInfusion", true)
+        val pendingCancelIntent = PendingIntent.getBroadcast(context, 0, cancelIntent, PendingIntent.FLAG_CANCEL_CURRENT)
+
         val notification = NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(context.getString(R.string.app_name))
@@ -47,11 +52,11 @@ class TimerReceiver : BroadcastReceiver() {
                 .setContentText(context.getString(R.string.notification_text_tea_ready))
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setAutoCancel(true)
+                .addAction(NotificationCompat.Action.Builder(R.drawable.ic_notification, "done", pendingCancelIntent).build())
                 .build()
 
         context.getNotificationManager().notify(notificationId, notification)
         createAndInstallCancellation(context)
-
         wakeLock.release()
     }
 

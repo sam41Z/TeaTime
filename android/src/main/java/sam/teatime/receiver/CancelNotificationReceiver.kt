@@ -11,8 +11,10 @@ class CancelNotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         context.getNotificationManager().cancel(intent.getIntExtra("id", 0))
-        State.lastSelectedInfusionIndex += 1
         Timer.resetAndPause()
-    }
 
+        if (intent.getBooleanExtra("incrementInfusion", false)) {
+            State.lastSelectedInfusionIndex += 1
+        }
+    }
 }

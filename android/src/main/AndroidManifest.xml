@@ -25,6 +25,8 @@
       </intent-filter>
     </activity>
 
+    <service android:name=".timer.TimerNotificationService" />
+
     <receiver android:name="sam.teatime.receiver.TimerReceiver"/>
     <receiver android:name="sam.teatime.receiver.CancelNotificationReceiver"/>
   </application>
