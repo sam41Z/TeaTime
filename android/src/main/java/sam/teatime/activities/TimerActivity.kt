@@ -128,7 +128,7 @@ class TimerActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.timer, menu)
         return super.onCreateOptionsMenu(menu)
     }
 

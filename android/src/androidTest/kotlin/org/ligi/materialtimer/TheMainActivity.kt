@@ -17,7 +17,7 @@ class TheMainActivity {
 
     @Test
     fun thatActivityShouldLaunch() {
-        rule.screenShot("main")
+        rule.screenShot("timer")
     }
 
     @Test

@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.Main
 import sam.teatime.db.TeaRoomDatabase
+import sam.teatime.db.entities.Infusion
 import sam.teatime.db.entities.Tea
 import sam.teatime.db.entities.TeaWithInfusions
 import sam.teatime.db.repositories.TeaRepository
@@ -29,6 +30,23 @@ class TeaViewModel(application: Application) : AndroidViewModel(application) {
 
     fun insert(tea: Tea) = scope.launch(Dispatchers.IO) {
         repository.insert(tea)
+    }
+
+    fun update(tea: Tea) = scope.launch(Dispatchers.IO) {
+        repository.update(tea)
+    }
+
+    fun update(teaId: Int, infusions: List<Infusion>) = scope.launch(Dispatchers.IO) {
+        deleteInfusionsForTeaId(teaId).join()
+        infusions.forEach { insert(it) }
+    }
+
+    fun insert(infusion: Infusion) = scope.launch(Dispatchers.IO) {
+        repository.insert(infusion)
+    }
+
+    fun deleteInfusionsForTeaId(teaId: Int) = scope.launch(Dispatchers.IO) {
+        repository.deleteInfusionsForTeaId(teaId)
     }
 
     override fun onCleared() {

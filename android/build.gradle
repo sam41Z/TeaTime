@@ -27,7 +27,7 @@ android {
     }
 
     sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
+        main.java.srcDirs += 'src/timer/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
 
@@ -103,6 +103,7 @@ configurations {
 
 dependencies {
 
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "com.android.support:appcompat-v7:$support_version"

@@ -12,7 +12,7 @@
   <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="4dp">
 
     <TextView
       android:id="@+id/tea_name"
@@ -20,7 +20,8 @@
       android:layout_alignParentTop="true"
       android:fontFamily="sans-serif-condensed"
       android:textSize="32sp"
-      android:layout_width="match_parent"
+      android:layout_margin="4dp"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"/>
     <TextView
       android:layout_width="wrap_content"
@@ -28,15 +29,27 @@
       android:id="@+id/tea_description"
       tools:text="Something between green and black tea"
       android:textSize="16sp"
+      android:layout_margin="4dp"
       android:fontFamily="sans-serif"
       android:layout_height="wrap_content"/>
 
     <android.support.v7.widget.AppCompatImageView
-      android:id="@+id/tea_infusions_icon"
+      android:id="@+id/tea_edit"
+      android:layout_alignParentBottom="true"
       android:layout_alignParentEnd="true"
+      android:tint="?colorControlNormal"
+      app:srcCompat="@drawable/ic_edit"
+      android:padding="8dp"
+      android:layout_width="36dp"
+      android:layout_height="36dp"/>
+
+    <android.support.v7.widget.AppCompatImageView
+      android:id="@+id/tea_infusions_icon"
       android:layout_alignParentTop="true"
+      android:layout_alignParentEnd="true"
       android:tint="?colorControlNormal"
       app:srcCompat="@drawable/ic_pot"
+      android:padding="4dp"
       android:layout_width="36dp"
       android:layout_height="36dp"/>
 
@@ -44,12 +57,12 @@
       android:id="@+id/tea_infusions_number"
       android:layout_alignStart="@id/tea_infusions_icon"
       android:layout_alignTop="@id/tea_infusions_icon"
-      android:layout_marginStart="12dp"
-      android:layout_marginTop="9dp"
+      android:layout_marginStart="13dp"
+      android:layout_marginTop="10dp"
       android:gravity="center"
       android:textColor="#ffffff"
       tools:text="4"
-      android:textSize="16sp"
+      android:textSize="14sp"
       android:fontFamily="sans-serif-condensed"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"/>
