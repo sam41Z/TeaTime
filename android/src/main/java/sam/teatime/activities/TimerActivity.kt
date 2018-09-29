@@ -6,10 +6,10 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.AnimatedVectorDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
-import android.support.graphics.drawable.VectorDrawableCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.method.LinkMovementMethod
@@ -41,14 +41,14 @@ class TimerActivity : AppCompatActivity() {
 
     var defaultTextColor: Int = 0
 
-    private var pauseState = !Timer.isPaused()
+    private var pauseState = !Timer.getTimer().isPaused()
     private var time = 180
     private var maxInfusions = 0
     private var tea: TeaWithInfusions? = null
 
     private val updater = object : Runnable {
         override fun run() {
-            val remaining = time - Timer.elapsedSeconds()
+            val remaining = time - Timer.getTimer().elapsedSeconds()
 
             val prefix = if (remaining < 0) {
                 timer_min.setTextColor(Color.RED)
@@ -65,11 +65,11 @@ class TimerActivity : AppCompatActivity() {
             timer_sec.text = zeroSecPrefix + Math.abs(remaining % 60).toString() + "s"
 
             tea_progress.max = time
-            tea_progress.progress = Timer.elapsedSeconds().toInt()
+            tea_progress.progress = Timer.getTimer().elapsedSeconds().toInt()
 
-            if (pauseState != Timer.isPaused()) {
+            if (pauseState != Timer.getTimer().isPaused()) {
 
-                pauseState = Timer.isPaused()
+                pauseState = Timer.getTimer().isPaused()
 
                 if (pauseState) {
                     getAlarmManager().cancel(pendingTimerReceiver)
@@ -77,15 +77,17 @@ class TimerActivity : AppCompatActivity() {
                     val triggerAtMillis = SystemClock.elapsedRealtime() + remaining * 1000
                     getAlarmManager().setExactAndAllowWhileIdleCompat(ELAPSED_REALTIME_WAKEUP, triggerAtMillis, pendingTimerReceiver)
                 }
-
-                val nextDrawable = if (pauseState) R.drawable.vectalign_vector_drawable_start else R.drawable.vectalign_vector_drawable_end
-                val drawable = VectorDrawableCompat.create(resources, nextDrawable, theme)
-                play_pause.setImageDrawable(drawable)
-
+                changeDrawableWithAnimation()
             }
             invalidateOptionsMenu()
 
             handler.postDelayed(this, 50)
+        }
+
+        private fun changeDrawableWithAnimation() {
+            val drawable = getDrawable(if (pauseState) R.drawable.vectalign_animated_vector_drawable_end_to_start else R.drawable.vectalign_animated_vector_drawable_start_to_end) as AnimatedVectorDrawable
+            play_pause.setImageDrawable(drawable)
+            drawable.start()
         }
     }
 
@@ -96,25 +98,19 @@ class TimerActivity : AppCompatActivity() {
         defaultTextColor = timer_min.currentTextColor
 
         play_pause.setOnClickListener {
-            Timer.togglePause()
+            Timer.getTimer().togglePause()
         }
 
         previous_infusion.setOnClickListener {
-            Timer.resetAndPause()
+            Timer.getTimer().resetAndPause()
             State.lastSelectedInfusionIndex = Math.max(0, State.lastSelectedInfusionIndex - 1)
             updateView()
         }
         next_infusion.setOnClickListener {
-            Timer.resetAndPause()
+            Timer.getTimer().resetAndPause()
             State.lastSelectedInfusionIndex = Math.min(maxInfusions - 1, State.lastSelectedInfusionIndex + 1)
             updateView()
         }
-
-//        stop.setOnClickListener {
-//            Timer.resetAndPause()
-//            State.lastSelectedInfusionIndex = Math.min(maxInfusions - 1, State.lastSelectedInfusionIndex + 1)
-//            updateView()
-//        }
 
         fabTimer.setOnClickListener {
             startActivityFromClass(TeaActivity::class.java)
@@ -123,7 +119,7 @@ class TimerActivity : AppCompatActivity() {
 
     override fun onPause() {
         handler.removeCallbacks(updater)
-        if (!Timer.isPaused()) {
+        if (!Timer.getTimer().isPaused()) {
             val intent = Intent(this, TimerNotificationService::class.java)
             intent.putExtra("time", time)
             startService(intent)
@@ -137,13 +133,13 @@ class TimerActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        menu.findItem(R.id.resetTime).isVisible = Timer.elapsedSeconds() > 0
+        menu.findItem(R.id.resetTime).isVisible = Timer.getTimer().elapsedSeconds() > 0
         return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.resetTime -> {
-            Timer.resetAndPause()
+            Timer.getTimer().resetAndPause()
             true
         }
         R.id.menuInfo -> {
@@ -169,8 +165,8 @@ class TimerActivity : AppCompatActivity() {
             teas?.find { tea -> tea.tea.id == State.lastSelectedTeaId }?.let {
                 tea = it
                 updateView()
+                handler.post(updater)
             }
-            handler.post(updater)
         })
     }
 

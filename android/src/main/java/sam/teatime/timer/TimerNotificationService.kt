@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Handler
 import android.os.IBinder
 import android.support.v4.app.NotificationCompat
+import android.util.Log
 import org.ligi.kaxt.getNotificationManager
 import sam.teatime.R
 import sam.teatime.activities.TimerActivity
@@ -20,21 +21,23 @@ class TimerNotificationService : Service() {
     private val channelId = "notification"
     private var notification: NotificationCompat.Builder? = null
     private var time: Int = 180
+    private val timer: Timer = Timer.getTimer()
 
-    val uppdater = object : Runnable {
+    private val updater = object : Runnable {
         override fun run() {
-            notification?.setProgress(time, Timer.elapsedSeconds().toInt(), false)
-            val remaining = time - Timer.elapsedSeconds().toInt()
-            val mins = if (remaining/60 > 0) "${(remaining / 60)}:" else ""
-            val secs = (if (!mins.isEmpty() && remaining < 10) "0" else "") + (remaining % 60)
-            notification?.setContentText("${mins}${secs}")
+            notification?.setProgress(time, timer.elapsedSeconds().toInt(), false)
+            val remaining = time - timer.elapsedSeconds().toInt()
+            val mins = if (remaining / 60 > 0) "${(remaining / 60)}:" else ""
+            val secs = (if (!mins.isEmpty() && remaining % 60 < 10) "0" else "") + (remaining % 60)
+            notification?.setContentText("$mins$secs")
             startForeground(notificationId, notification?.build())
             handler.postDelayed(this, 1000)
+            Log.d("SERVICE", "updated time to $mins$secs")
         }
     }
 
     private fun createChannel() {
-        val channel = NotificationChannel(channelId, "Tea Time", NotificationManager.IMPORTANCE_DEFAULT)
+        val channel = NotificationChannel(channelId, getString(R.string.app_name), NotificationManager.IMPORTANCE_DEFAULT)
         channel.description = "Notifies when tea is ready"
         channel.enableVibration(false)
         applicationContext.getNotificationManager().createNotificationChannel(channel)
@@ -50,20 +53,26 @@ class TimerNotificationService : Service() {
                 Intent(applicationContext, TimerActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
         notification = NotificationCompat.Builder(applicationContext, channelId)
                 .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle("It's time for tea in:")
+                .setContentTitle(getString(R.string.notification_text_tea_ready_in))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
                 .setOngoing(true)
                 .setOnlyAlertOnce(true)
     }
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent != null) {
+            time = intent.getIntExtra("time", 180)
+            handler.post(updater)
+        }
+        return START_STICKY
+    }
+
     override fun onStart(intent: Intent?, startId: Int) {
-        if (intent == null) return
-        time = intent.getIntExtra("time", 180)
-        handler.post(uppdater)
+
     }
 
     override fun onDestroy() {
-        handler.removeCallbacks(uppdater)
+        handler.removeCallbacks(updater)
     }
 }

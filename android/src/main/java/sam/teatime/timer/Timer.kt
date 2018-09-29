@@ -1,8 +1,13 @@
 package sam.teatime.timer
 
+import android.arch.persistence.room.Room
+import android.content.Context
 import android.os.SystemClock
+import kotlinx.coroutines.experimental.CoroutineScope
+import sam.teatime.State
+import sam.teatime.db.TeaRoomDatabase
 
-object Timer {
+class Timer {
 
     var startTime = SystemClock.elapsedRealtime()
     var pauseTime: Long? = SystemClock.elapsedRealtime()
@@ -18,6 +23,7 @@ object Timer {
         } else {
             startTime = SystemClock.elapsedRealtime() - (pauseTime!! - startTime)
             pauseTime = null
+
         }
     }
 
@@ -28,4 +34,21 @@ object Timer {
 
     fun isPaused() = pauseTime != null
 
+    companion object {
+        @Volatile
+        private var INSTANCE: Timer? = null
+
+        fun getTimer(): Timer {
+            val tempInstance = INSTANCE
+            if (tempInstance != null) {
+                return tempInstance
+            }
+            synchronized(this) {
+                // Create database here
+                val instance = Timer()
+                INSTANCE = instance
+                return instance
+            }
+        }
+    }
 }

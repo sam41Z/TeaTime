@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Tea Time</string>
     <string name="notification_text_tea_ready">Tea is ready!</string>
+    <string name="notification_text_tea_ready_in">Tea is ready in:</string>
     <string name="help">
 <![CDATA[
 <h1>What is this</h1>

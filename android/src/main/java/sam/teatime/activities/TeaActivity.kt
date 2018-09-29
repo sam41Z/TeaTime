@@ -33,7 +33,6 @@ class TeaActivity : AppCompatActivity() {
 
         teaViewModel = ViewModelProviders.of(this).get(TeaViewModel::class.java)
         teaViewModel.allTeas.observe(this, Observer { teas ->
-            // Update the cached copy of the words in the adapter.
             teas?.let { adapter.setTeas(it) }
         })
     }

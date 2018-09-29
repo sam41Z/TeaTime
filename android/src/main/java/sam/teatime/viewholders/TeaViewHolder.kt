@@ -25,7 +25,7 @@ class TeaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             }
 
             itemView.setOnClickListener {
-                Timer.resetAndPause()
+                Timer.getTimer().resetAndPause()
 
                 val activity = itemView.context as FragmentActivity
                 State.lastSelectedTeaId = tea.tea.id
