@@ -34,7 +34,7 @@ class TimerReceiver : BroadcastReceiver() {
         val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
         val wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK or
                 PowerManager.ACQUIRE_CAUSES_WAKEUP or
-                PowerManager.ON_AFTER_RELEASE, "mysms1")
+                PowerManager.ON_AFTER_RELEASE, "tea")
         wakeLock.acquire(1000)
 
         val pendingIntent = PendingIntent.getActivity(
@@ -46,16 +46,14 @@ class TimerReceiver : BroadcastReceiver() {
         val cancelIntent = Intent(context, CancelNotificationReceiver::class.java)
         cancelIntent.putExtra("id", notificationId)
         cancelIntent.putExtra("incrementInfusion", true)
-        val pendingCancelIntent = PendingIntent.getBroadcast(context, 0, cancelIntent, PendingIntent.FLAG_CANCEL_CURRENT)
 
         val notification = NotificationCompat.Builder(context, channelId)
-                .setSmallIcon(R.drawable.ic_notification)
+                .setSmallIcon(R.drawable.ic_pot)
                 .setContentTitle(context.getString(R.string.app_name))
                 .setContentIntent(pendingIntent)
                 .setContentText(context.getString(R.string.notification_text_tea_ready))
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setAutoCancel(true)
-//                .addAction(NotificationCompat.Action.Builder(R.drawable.ic_notification, "done", pendingCancelIntent).build())
                 .build()
 
         context.getNotificationManager().notify(notificationId, notification)

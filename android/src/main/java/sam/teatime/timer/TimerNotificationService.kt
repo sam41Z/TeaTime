@@ -52,7 +52,7 @@ class TimerNotificationService : Service() {
         val pendingIntent = PendingIntent.getActivity(applicationContext, 0,
                 Intent(applicationContext, TimerActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
         notification = NotificationCompat.Builder(applicationContext, channelId)
-                .setSmallIcon(R.drawable.ic_notification)
+                .setSmallIcon(R.drawable.ic_pot)
                 .setContentTitle(getString(R.string.notification_text_tea_ready_in))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
