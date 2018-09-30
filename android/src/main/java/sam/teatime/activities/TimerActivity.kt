@@ -13,6 +13,7 @@ import android.os.SystemClock
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_timer.*
@@ -24,9 +25,9 @@ import org.ligi.kaxt.startActivityFromClass
 import sam.teatime.R
 import sam.teatime.State
 import sam.teatime.db.entities.TeaWithInfusions
-import sam.teatime.receiver.TimerReceiver
+import sam.teatime.receivers.TimerReceiver
 import sam.teatime.timer.Timer
-import sam.teatime.timer.TimerNotificationService
+import sam.teatime.services.TimerNotificationService
 import sam.teatime.viewmodels.TeaViewModel
 
 
@@ -51,21 +52,21 @@ class TimerActivity : AppCompatActivity() {
             val remaining = time - Timer.getTimer().elapsedSeconds()
 
             val prefix = if (remaining < 0) {
-                timer_min.setTextColor(Color.RED)
-                timer_sec.setTextColor(Color.RED)
+                timerMin.setTextColor(Color.RED)
+                timerSec.setTextColor(Color.RED)
                 "-"
             } else {
-                timer_min.setTextColor(defaultTextColor)
-                timer_sec.setTextColor(defaultTextColor)
+                timerMin.setTextColor(defaultTextColor)
+                timerSec.setTextColor(defaultTextColor)
                 ""
             }
 
-            timer_min.text = prefix + Math.abs(remaining / 60).toString() + "m"
+            timerMin.text = prefix + Math.abs(remaining / 60).toString() + "m"
             val zeroSecPrefix = if (Math.abs((remaining % 60)) < 10) "0" else ""
-            timer_sec.text = zeroSecPrefix + Math.abs(remaining % 60).toString() + "s"
+            timerSec.text = zeroSecPrefix + Math.abs(remaining % 60).toString() + "s"
 
-            tea_progress.max = time
-            tea_progress.progress = Timer.getTimer().elapsedSeconds().toInt()
+            teaProgress.max = time
+            teaProgress.progress = Timer.getTimer().elapsedSeconds().toInt()
 
             if (pauseState != Timer.getTimer().isPaused()) {
 
@@ -74,8 +75,10 @@ class TimerActivity : AppCompatActivity() {
                 if (pauseState) {
                     getAlarmManager().cancel(pendingTimerReceiver)
                 } else if (remaining > 0) {
-                    val triggerAtMillis = SystemClock.elapsedRealtime() + remaining * 1000
+                    val now = SystemClock.elapsedRealtime()
+                    val triggerAtMillis = now + remaining * 1000
                     getAlarmManager().setExactAndAllowWhileIdleCompat(ELAPSED_REALTIME_WAKEUP, triggerAtMillis, pendingTimerReceiver)
+                    Log.d("ALARM", "Alarm scheduled at $triggerAtMillis now: $now remaining: $remaining")
                 }
                 changeDrawableWithAnimation()
             }
@@ -86,7 +89,7 @@ class TimerActivity : AppCompatActivity() {
 
         private fun changeDrawableWithAnimation() {
             val drawable = getDrawable(if (pauseState) R.drawable.vectalign_animated_vector_drawable_end_to_start else R.drawable.vectalign_animated_vector_drawable_start_to_end) as AnimatedVectorDrawable
-            play_pause.setImageDrawable(drawable)
+            playPause.setImageDrawable(drawable)
             drawable.start()
         }
     }
@@ -95,18 +98,18 @@ class TimerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_timer)
 
-        defaultTextColor = timer_min.currentTextColor
+        defaultTextColor = timerMin.currentTextColor
 
-        play_pause.setOnClickListener {
+        playPause.setOnClickListener {
             Timer.getTimer().togglePause()
         }
 
-        previous_infusion.setOnClickListener {
+        previousInfusion.setOnClickListener {
             Timer.getTimer().resetAndPause()
             State.lastSelectedInfusionIndex = Math.max(0, State.lastSelectedInfusionIndex - 1)
             updateView()
         }
-        next_infusion.setOnClickListener {
+        nextInfusion.setOnClickListener {
             Timer.getTimer().resetAndPause()
             State.lastSelectedInfusionIndex = Math.min(maxInfusions - 1, State.lastSelectedInfusionIndex + 1)
             updateView()
@@ -176,9 +179,9 @@ class TimerActivity : AppCompatActivity() {
             maxInfusions = tea.infusions.size
             val infusionIndex = Math.min(State.lastSelectedInfusionIndex, maxInfusions - 1)
             time = tea.infusions[infusionIndex].time
-            tea_name.text = tea.tea.name
-            tea_infusion.text = "Infusion ${infusionIndex + 1}"
-            tea_mins.text = "${time / 60}m"
+            teaName.text = tea.tea.name
+            teaInfusion.text = "Infusion ${infusionIndex + 1}"
+            teaMins.text = "${time / 60}m"
             tea_secs.text = "${time % 60}s"
         }
     }

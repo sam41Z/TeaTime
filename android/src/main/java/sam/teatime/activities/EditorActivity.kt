@@ -12,13 +12,14 @@ import android.widget.EditText
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_editor.*
 import kotlinx.android.synthetic.main.edit_infusion.view.*
-import kotlinx.coroutines.experimental.async
 import sam.teatime.R
 import sam.teatime.TimeUtil
 import sam.teatime.db.entities.Infusion
 import sam.teatime.db.entities.Tea
 import sam.teatime.db.entities.TeaWithInfusions
+import sam.teatime.random
 import sam.teatime.viewmodels.TeaViewModel
+import java.util.*
 
 class EditorActivity : AppCompatActivity() {
 
@@ -85,6 +86,11 @@ class EditorActivity : AppCompatActivity() {
             finish()
             true
         }
+        R.id.menuDelete -> {
+            deleteTea()
+            finish()
+            true
+        }
         else -> super.onOptionsItemSelected(item)
     }
 
@@ -98,7 +104,22 @@ class EditorActivity : AppCompatActivity() {
                 Infusion(teaId, i++, TimeUtil.parseString(edit.text.toString()))
             }.toList()
             teaViewModel.update(teaId, infusions)
+        } else {
+            val newTeaId = Math.abs(Random().nextInt())
+            teaViewModel.insert(Tea(newTeaId, teaName.text.toString(), teaDescription.text.toString()))
+            var i = 0
+            infusionEditTexts.asSequence().forEach {
+                teaViewModel.insert(Infusion(newTeaId, i++, TimeUtil.parseString(it.text.toString())))
+            }
+        }
+    }
 
+    private fun deleteTea() {
+        val teaId = teaId
+        if (teaId != null) {
+            val teaViewModel = ViewModelProviders.of(this).get(TeaViewModel::class.java)
+            teaViewModel.deleteInfusionsForTeaId(teaId)
+            teaViewModel.deleteByTeaId(teaId)
         }
     }
 }

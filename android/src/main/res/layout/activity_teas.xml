@@ -1,11 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView
+<android.support.constraint.ConstraintLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
   xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:id="@+id/tea_recycler"
+  xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:clipToPadding="false"
-  android:padding="16dp"
-  tools:context="sam.teatime.activities.TeaActivity"/>
+  tools:context="sam.teatime.activities.EditorActivity">
+
+  <android.support.v7.widget.RecyclerView
+    android:id="@+id/teaRecycler"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:padding="16dp"/>
+
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/addTea"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:layout_margin="16dp"
+    app:srcCompat="@drawable/ic_action_add"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"/>
+</android.support.constraint.ConstraintLayout>

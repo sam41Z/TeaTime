@@ -24,10 +24,10 @@
       </intent-filter>
     </activity>
 
-    <service android:name=".timer.TimerNotificationService"/>
+    <service android:name=".services.TimerNotificationService"/>
 
-    <receiver android:name=".receiver.TimerReceiver"/>
-    <receiver android:name=".receiver.CancelNotificationReceiver"/>
+    <receiver android:name=".receivers.TimerReceiver"/>
+    <receiver android:name=".receivers.CancelNotificationReceiver"/>
 
     <activity android:name=".activities.EditorActivity">
     </activity>

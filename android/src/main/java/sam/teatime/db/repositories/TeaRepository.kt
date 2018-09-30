@@ -22,6 +22,11 @@ class TeaRepository (private val teaDao: TeaDao) {
     }
 
     @WorkerThread
+    fun deleteByTeaId(teaId: Int) {
+        teaDao.deleteByTeaId(teaId)
+    }
+
+    @WorkerThread
     fun insert(infusion: Infusion) {
         teaDao.insert(infusion)
     }

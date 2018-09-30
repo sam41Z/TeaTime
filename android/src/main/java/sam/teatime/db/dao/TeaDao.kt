@@ -26,6 +26,9 @@ interface TeaDao {
     @Query("DELETE FROM teas")
     fun deleteAll()
 
+    @Query("DELETE FROM teas WHERE id = :teaId")
+    fun deleteByTeaId(teaId: Int)
+
     @Query("DELETE FROM infusions WHERE teaId = :teaId")
     fun deleteInfusionsForTeaId(teaId: Int)
 

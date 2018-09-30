@@ -36,6 +36,10 @@ class TeaViewModel(application: Application) : AndroidViewModel(application) {
         repository.update(tea)
     }
 
+    fun deleteByTeaId(teaId: Int) = scope.launch(Dispatchers.IO) {
+        repository.deleteByTeaId(teaId)
+    }
+
     fun update(teaId: Int, infusions: List<Infusion>) = scope.launch(Dispatchers.IO) {
         deleteInfusionsForTeaId(teaId).join()
         infusions.forEach { insert(it) }

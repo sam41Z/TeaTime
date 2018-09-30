@@ -1,7 +1,6 @@
 package sam.teatime.viewholders
 
 import android.content.Intent
-import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -18,7 +17,7 @@ class TeaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(tea: TeaWithInfusions) {
         val activity = itemView.context as FragmentActivity
-        itemView.tea_name.text = tea.tea.name
+        itemView.teaName.text = tea.tea.name
         itemView.tea_description.text = tea.tea.description
         itemView.tea_infusions_number.text = tea.infusions.size.toString()
 

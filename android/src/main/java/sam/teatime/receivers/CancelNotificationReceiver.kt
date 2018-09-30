@@ -1,4 +1,4 @@
-package sam.teatime.receiver
+package sam.teatime.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context

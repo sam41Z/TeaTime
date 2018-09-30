@@ -23,21 +23,25 @@ class TeaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_teas)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        tea_recycler.layoutManager = LinearLayoutManager(this)
+        teaRecycler.layoutManager = LinearLayoutManager(this)
         val adapter = TeaAdapter()
-        tea_recycler.adapter = adapter
+        teaRecycler.adapter = adapter
 
-        tea_recycler.postDelayed({
+        teaRecycler.postDelayed({
             ActivityCompat.startPostponedEnterTransition(this)
-        },100)
+        }, 100)
 
         teaViewModel = ViewModelProviders.of(this).get(TeaViewModel::class.java)
         teaViewModel.allTeas.observe(this, Observer { teas ->
             teas?.let { adapter.setTeas(it) }
         })
+
+        addTea.setOnClickListener {
+            startActivityFromClass(EditorActivity::class.java)
+        }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId){
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
             startActivityFromClass(TimerActivity::class.java)
             finish()

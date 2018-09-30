@@ -18,7 +18,7 @@
     android:layout_height="wrap_content">
 
     <android.support.v7.widget.AppCompatImageView
-      android:id="@+id/previous_infusion"
+      android:id="@+id/previousInfusion"
       android:src="@drawable/vectalign_vector_drawable_previous"
       android:paddingTop="4dp"
       android:paddingBottom="8dp"
@@ -27,7 +27,7 @@
       android:layout_gravity="center_vertical"/>
 
     <TextView
-      android:id="@+id/tea_infusion"
+      android:id="@+id/teaInfusion"
       tools:text="Infusion: 1"
       android:fontFamily="sans-serif-condensed"
       android:textSize="32sp"
@@ -35,7 +35,7 @@
       android:layout_height="48dp"/>
 
     <android.support.v7.widget.AppCompatImageView
-      android:id="@+id/next_infusion"
+      android:id="@+id/nextInfusion"
       android:src="@drawable/vectalign_vector_drawable_next"
       android:paddingTop="4dp"
       android:paddingBottom="8dp"
@@ -52,14 +52,14 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <TextView
-      android:id="@+id/timer_min"
+      android:id="@+id/timerMin"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:fontFamily="sans-serif"
       android:textSize="48sp"
       tools:text="5m"/>
     <TextView
-      android:id="@+id/timer_sec"
+      android:id="@+id/timerSec"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:fontFamily="sans-serif-light"
@@ -77,30 +77,31 @@
     android:layout_marginTop="24dp"
     android:orientation="horizontal">
     <android.support.v7.widget.AppCompatImageView
-      android:id="@+id/play_pause"
+      android:id="@+id/playPause"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center_vertical"/>
+
     <!--<android.support.v7.widget.AppCompatImageView-->
-      <!--android:id="@+id/stop"-->
-      <!--android:src="@drawable/vectalign_vector_drawable_stop"-->
-      <!--android:layout_width="wrap_content"-->
-      <!--android:layout_height="wrap_content"-->
-      <!--android:layout_gravity="center_vertical"/>-->
+    <!--android:id="@+id/stop"-->
+    <!--android:src="@drawable/vectalign_vector_drawable_stop"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center_vertical"/>-->
 
   </LinearLayout>
 
   <ProgressBar
     android:layout_below="@id/controls"
     style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-    android:id="@+id/tea_progress"
+    android:id="@+id/teaProgress"
     android:layout_margin="12dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"/>
 
   <TextView
-    android:layout_below="@id/tea_progress"
-    android:id="@+id/tea_name"
+    android:layout_below="@id/teaProgress"
+    android:id="@+id/teaName"
     tools:text="Oolong"
     android:layout_centerInParent="true"
     android:fontFamily="sans-serif-condensed"
@@ -109,23 +110,23 @@
     android:layout_height="wrap_content"/>
 
   <LinearLayout
-    android:id="@+id/tea_time"
+    android:id="@+id/teaTime"
     android:layout_centerInParent="true"
-    android:layout_below="@id/tea_name"
+    android:layout_below="@id/teaName"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <TextView
       android:layout_width="wrap_content"
-      android:id="@+id/tea_mins"
+      android:id="@+id/teaMins"
       tools:text="5m"
       android:textSize="24sp"
       android:fontFamily="sans-serif"
       android:layout_height="wrap_content"/>
     <TextView
       android:layout_width="wrap_content"
-      android:layout_toRightOf="@id/tea_mins"
+      android:layout_toRightOf="@id/teaMins"
       android:id="@+id/tea_secs"
-      android:layout_below="@id/tea_name"
+      android:layout_below="@id/teaName"
       tools:text="10s"
       android:textSize="24sp"
       android:fontFamily="sans-serif-thin"
@@ -134,8 +135,8 @@
 
   <TextView
     android:layout_width="wrap_content"
-    android:id="@+id/tea_temp"
-    android:layout_below="@id/tea_time"
+    android:id="@+id/teaTemp"
+    android:layout_below="@id/teaTime"
     android:layout_centerInParent="true"
     tools:text="90°C"
     android:textSize="24sp"

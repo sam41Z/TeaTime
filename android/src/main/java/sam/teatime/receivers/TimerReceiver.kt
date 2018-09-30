@@ -1,4 +1,4 @@
-package sam.teatime.receiver
+package sam.teatime.receivers
 
 import android.app.AlarmManager.ELAPSED_REALTIME_WAKEUP
 import android.app.Notification
@@ -17,7 +17,7 @@ import sam.teatime.activities.TimerActivity
 import sam.teatime.R
 import java.util.*
 import android.os.PowerManager
-import sam.teatime.timer.TimerNotificationService
+import sam.teatime.services.TimerNotificationService
 
 
 class TimerReceiver : BroadcastReceiver() {

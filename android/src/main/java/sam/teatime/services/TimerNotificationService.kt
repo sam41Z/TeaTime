@@ -1,4 +1,4 @@
-package sam.teatime.timer
+package sam.teatime.services
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -12,6 +12,7 @@ import android.util.Log
 import org.ligi.kaxt.getNotificationManager
 import sam.teatime.R
 import sam.teatime.activities.TimerActivity
+import sam.teatime.timer.Timer
 import java.util.*
 
 class TimerNotificationService : Service() {

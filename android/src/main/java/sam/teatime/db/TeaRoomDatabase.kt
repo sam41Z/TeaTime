@@ -34,7 +34,7 @@ abstract class TeaRoomDatabase : RoomDatabase() {
                         TeaRoomDatabase::class.java,
                         "tea_database"
                 )
-                        .addCallback(TeaDatabaseCallback(scope))
+//                        .addCallback(TeaDatabaseCallback(scope))
                         .build()
                 INSTANCE = instance
                 return instance
