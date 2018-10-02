@@ -23,6 +23,7 @@ class TeaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_teas)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         teaRecycler.layoutManager = LinearLayoutManager(this)
         val adapter = TeaAdapter()
         teaRecycler.adapter = adapter
@@ -43,7 +44,6 @@ class TeaActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         android.R.id.home -> {
-            startActivityFromClass(TimerActivity::class.java)
             finish()
             true
         }

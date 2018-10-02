@@ -31,6 +31,8 @@ class EditorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_editor)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         if (intent != null && intent.hasExtra("teaId")) {
             teaId = intent.getIntExtra("teaId", 0)
         }
@@ -81,6 +83,10 @@ class EditorActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        android.R.id.home -> {
+            finish()
+            true
+        }
         R.id.menuDone -> {
             saveChanges()
             finish()
